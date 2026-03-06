@@ -1,0 +1,27 @@
+spring.application.name=EmplApp
+server.port=8081
+
+# Command Database (Write)
+spring.datasource.command.url=jdbc:postgresql://localhost:5434/your_db
+spring.datasource.command.username=your_username
+spring.datasource.command.password=your_password
+spring.datasource.command.driver-class-name=org.postgresql.Driver
+
+# Query Database (Read)
+spring.datasource.query.url=jdbc:postgresql://localhost:5435/your_db
+spring.datasource.query.username=your_username
+spring.datasource.query.password=your_password
+spring.datasource.query.driver-class-name=org.postgresql.Driver
+
+# Show SQL
+spring.jpa.show-sql=true
+
+# RabbitMQ
+spring.rabbitmq.host=localhost
+spring.rabbitmq.port=5672
+spring.rabbitmq.username=your_username
+spring.rabbitmq.password=your_password
+
+# Redis
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
