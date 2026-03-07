@@ -6,6 +6,7 @@ import com.EmplApp.EmplApp.service.EmplInterfaceQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class EmpControllerQuery {
 
 
     @GetMapping("list/redis")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @Cacheable(value="emplrecords")
     public List<EmplRecords> listAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         System.out.println("Data from db");
@@ -45,6 +47,7 @@ public class EmpControllerQuery {
 
 
     @GetMapping("record")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @Cacheable(value="emplrecords",key="#input.email")
     public EmplRecords listEmp(@RequestBody EmplRecords input){
         System.out.println("Data from db");

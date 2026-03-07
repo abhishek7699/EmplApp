@@ -8,6 +8,7 @@ import com.EmplApp.EmplApp.utilty.ObjectMapping;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -34,6 +35,7 @@ public class EmpControllerCommand {
 
 
     @PostMapping("new-record")
+    @PreAuthorize(("hasRole('ADMIN')"))
     public String addEmployyes(@Valid  @RequestBody EmployeeCreateDTO input1) throws ParseException {
         EmplRecords input= map.convertToEntity(input1);
 
@@ -47,6 +49,7 @@ public class EmpControllerCommand {
 
 
     @DeleteMapping("remove-record")
+    @PreAuthorize(("hasRole('ADMIN')"))
     @CacheEvict(value="emplrecords", key="#input.email")
     public String deleteEmployee(@RequestBody EmplRecords input) throws ParseException {
 
@@ -58,7 +61,10 @@ public class EmpControllerCommand {
 
         return service.DeleteEmployee(input);
     }
+
     @PatchMapping("change-record")
+    @PreAuthorize(("hasRole('ADMIN')"))
+    @CacheEvict(value="emplrecords", key="#input.email")
     public String editEmployee(@Valid @RequestBody EmployeeCreateDTO input1) throws ParseException {
         EmplRecords input= map.convertToEntity(input1);
         if (input == null || input.getEmail() == null) {
