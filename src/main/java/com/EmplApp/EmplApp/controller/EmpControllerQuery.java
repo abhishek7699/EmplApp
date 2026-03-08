@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("employees-query")
+@RequestMapping("api/v1")
 public class EmpControllerQuery {
 
     @Autowired
@@ -32,7 +32,7 @@ public class EmpControllerQuery {
 
 
 
-    @GetMapping("list/redis")
+    @GetMapping("list")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @Cacheable(value="emplrecords")
     public List<EmplRecords> listAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){

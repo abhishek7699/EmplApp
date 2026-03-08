@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,13 +28,22 @@ public class CommandDatasourceConfig {
 
 
 
+    @Value("${spring.datasource.command.url}")
+    private String url;
+
+    @Value("${spring.datasource.command.username}")
+    private String username;
+
+    @Value("${spring.datasource.command.password}")
+    private String password;
+
     @Primary
     @Bean(name = "commandDataSource")
     public DataSource commandDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5434/empl_db_command");
-        dataSource.setUsername("admin_1");
-        dataSource.setPassword("admin123");
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;
     }

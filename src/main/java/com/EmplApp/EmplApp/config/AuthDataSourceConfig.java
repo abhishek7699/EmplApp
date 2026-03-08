@@ -3,6 +3,7 @@ package com.EmplApp.EmplApp.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,12 +25,21 @@ import java.util.HashMap;
 public class AuthDataSourceConfig {
 
 
+    @Value("${spring.datasource.auth.url}")
+    private String url;
+
+    @Value("${spring.datasource.auth.username}")
+    private String username;
+
+    @Value("${spring.datasource.auth.password}")
+    private String password;
+
     @Bean(name = "authDataSource")
     public DataSource authDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl("jdbc:postgresql://localhost:5436/empl_db_auth");
-        dataSource.setUsername("admin_3");
-        dataSource.setPassword("admin123");
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
         dataSource.setDriverClassName("org.postgresql.Driver");
         return dataSource;
     }

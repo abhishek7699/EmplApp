@@ -52,13 +52,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/register", "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/AddEmployee").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/EditEmployee").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/DeleteEmployee/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/ViewEmployee").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.POST, "/AddEmployee").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.PUT, "/EditEmployee").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE, "/DeleteEmployee/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.GET, "/ViewEmployee").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
-                .oauth2Login(Customizer.withDefaults())
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

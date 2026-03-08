@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("employees-command")
+@RequestMapping("api/v2")
 public class EmpControllerCommand {
 
     @Autowired
@@ -34,7 +34,7 @@ public class EmpControllerCommand {
 
 
 
-    @PostMapping("new-record")
+    @PostMapping("record")
     @PreAuthorize(("hasRole('ADMIN')"))
     public String addEmployyes(@Valid  @RequestBody EmployeeCreateDTO input1) throws ParseException {
         EmplRecords input= map.convertToEntity(input1);
@@ -48,7 +48,7 @@ public class EmpControllerCommand {
     }
 
 
-    @DeleteMapping("remove-record")
+    @DeleteMapping("record")
     @PreAuthorize(("hasRole('ADMIN')"))
     @CacheEvict(value="emplrecords", key="#input.email")
     public String deleteEmployee(@RequestBody EmplRecords input) throws ParseException {
@@ -62,7 +62,7 @@ public class EmpControllerCommand {
         return service.DeleteEmployee(input);
     }
 
-    @PatchMapping("change-record")
+    @PatchMapping("record")
     @PreAuthorize(("hasRole('ADMIN')"))
     @CacheEvict(value="emplrecords", key="#input.email")
     public String editEmployee(@Valid @RequestBody EmployeeCreateDTO input1) throws ParseException {
