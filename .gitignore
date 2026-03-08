@@ -35,5 +35,5 @@ build/
 
 # Sensitive files - never push these!
 src/main/resources/application.properties
-docker-compose.yml
+
 .DS_Store
