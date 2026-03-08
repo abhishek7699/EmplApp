@@ -1,0 +1,141 @@
+services:
+  postgres-command:
+    image: postgres:16
+    container_name: empl_app_db_command
+    environment:
+      POSTGRES_DB: empl_db_command
+      POSTGRES_USER: admin_1
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_command_data:/var/lib/postgresql/data
+    networks:
+      - empl-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin_1 -d empl_db_command" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres-query:
+    image: postgres:16
+    container_name: empl_app_db_query
+    environment:
+      POSTGRES_DB: empl_db_query
+      POSTGRES_USER: admin_2
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_query_data:/var/lib/postgresql/data
+    networks:
+      - empl-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_2 -d empl_db_query"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  postgres-Auth:
+    image: postgres:16
+    container_name: empl_app_auth
+    environment:
+      POSTGRES_DB: empl_db_auth
+      POSTGRES_USER: admin_3
+      POSTGRES_PASSWORD: admin123
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_Auth:/var/lib/postgresql/data
+    networks:
+      - empl-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin_3 -d empl_db_auth"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: empl_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit_admin
+      RABBITMQ_DEFAULT_PASS: rabbit123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - empl-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: empl_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - empl-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    container_name: empl_pgadmin
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: admin123
+#    ports:
+#      - "5050:80"
+#    depends_on:
+#      - postgres-command
+#      - postgres-query
+#      - postgres-Auth
+#    networks:
+#      - empl-network
+
+  empl-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: empl_app
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      postgres-command:
+        condition: service_healthy
+      postgres-query:
+        condition: service_healthy
+      postgres-Auth:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - empl-network
+
+volumes:
+  postgres_command_data:
+  postgres_query_data:
+  rabbitmq_data:
+  redis_data:
+  postgres_Auth:
+
+networks:
+  empl-network:
+    driver: bridge
