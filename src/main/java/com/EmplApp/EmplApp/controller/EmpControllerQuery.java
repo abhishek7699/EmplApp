@@ -48,18 +48,15 @@ public class EmpControllerQuery {
 
     @GetMapping("record")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @Cacheable(value="emplrecords",key="#input.email")
-    public EmplRecords listEmp(@RequestBody EmplRecords input){
+    @Cacheable(value="emplrecords",key="#userEmail")
+    public EmplRecords listEmp(@RequestParam String userEmail){
         System.out.println("Data from db");
 
 
-        if (input == null || input.getEmail() == null) {
+        if ( userEmail== null ) {
 
             return null;
         }
-
-        String userEmail = input.getEmail();
-
         return service.viewEmployee(userEmail);
     }
 

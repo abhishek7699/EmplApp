@@ -105,8 +105,8 @@ services:
 #      - postgres-command
 #      - postgres-query
 #      - postgres-Auth
-#    networks:
-#      - empl-network
+##    networks:
+##      - empl-network
 
   empl-app:
     build:
@@ -130,6 +130,7 @@ services:
         condition: service_healthy
     networks:
       - empl-network
+    restart: always
 
 volumes:
   postgres_command_data:

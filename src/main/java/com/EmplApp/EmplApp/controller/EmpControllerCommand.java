@@ -64,7 +64,7 @@ public class EmpControllerCommand {
 
     @PatchMapping("record")
     @PreAuthorize(("hasRole('ADMIN')"))
-    @CacheEvict(value="emplrecords", key="#input.email")
+    @CacheEvict(value="emplrecords", key="#input1.email")
     public String editEmployee(@Valid @RequestBody EmployeeCreateDTO input1) throws ParseException {
         EmplRecords input= map.convertToEntity(input1);
         if (input == null || input.getEmail() == null) {
